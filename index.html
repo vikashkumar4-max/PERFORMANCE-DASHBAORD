@@ -3,107 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Common RTO Multi-Page Executive Portal</title>
+  <title>Common RTO Executive Portal</title>
   
-  <!-- Bootstrap 5 & Icons -->
+  <!-- Fonts & Core Stylesheets -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-
-  <style>
-    :root {
-      --bg-light: #F4F6FB;
-      --card-bg: #FFFFFF;
-      --primary-color: #1E3A8A;
-      --accent-color: #2563EB;
-      --gold-accent: #D97706;
-      --text-main: #0F172A;
-    }
-
-    body {
-      background-color: var(--bg-light);
-      color: var(--text-main);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      user-select: none;
-    }
-
-    .navbar-custom {
-      background: #FFFFFF;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-      border-bottom: 1px solid #E2E8F0;
-    }
-
-    .nav-tab-btn {
-      background: transparent;
-      border: none;
-      color: #64748B;
-      font-weight: 600;
-      padding: 12px 24px;
-      border-bottom: 3px solid transparent;
-      transition: all 0.3s ease;
-    }
-
-    .nav-tab-btn.active {
-      color: var(--accent-color);
-      border-bottom-color: var(--accent-color);
-      background: rgba(37, 99, 235, 0.05);
-    }
-
-    /* 3D Glassmorphic Cards Styling */
-    .card-3d {
-      background: #FFFFFF;
-      border-radius: 16px;
-      border: 1px solid rgba(226, 232, 240, 0.8);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-      transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .card-3d:hover {
-      transform: perspective(1000px) rotateX(2deg) rotateY(2deg) translateY(-5px);
-      box-shadow: 0 20px 30px -10px rgba(37, 99, 235, 0.15);
-      border-color: var(--accent-color);
-    }
-
-    .progress-bar-custom {
-      height: 8px;
-      border-radius: 4px;
-      background: #E2E8F0;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #10B981, #059669);
-      transition: width 0.5s ease;
-    }
-
-    #loader {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(255, 255, 255, 0.95);
-      z-index: 9999;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-  </style>
+  
+  <!-- Separate Custom External Stylesheet -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body oncontextmenu="return false;">
 
-  <!-- Loader -->
+  <!-- Fast Loader Overlay -->
   <div id="loader">
     <div class="spinner-border text-primary" style="width: 3.5rem; height: 3.5rem;" role="status"></div>
-    <p class="mt-3 text-secondary fw-semibold">Loading Portal Data...</p>
+    <p class="mt-3 text-secondary fw-bold">Syncing COMMON RTO DATA Engine...</p>
   </div>
 
-  <!-- Top Navbar -->
-  <div class="navbar-custom sticky-top px-4 py-2">
+  <!-- Top Header Navigation -->
+  <div class="top-navbar sticky-top px-4 py-2">
     <div class="container-fluid d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center gap-3">
-        <h4 class="fw-bold text-primary m-0"><i class="bi bi-layers-half me-2"></i>COMMON RTO PORTAL</h4>
+        <h4 class="fw-bold text-dark m-0"><i class="bi bi-shield-check text-primary me-2"></i>COMMON RTO PORTAL</h4>
         <div class="d-flex ms-4">
-          <button class="nav-tab-btn active" onclick="switchTab('page1', this)"><i class="bi bi-funnel-fill me-1"></i> Data Filter Engine</button>
-          <button class="nav-tab-btn" onclick="switchTab('page2', this)"><i class="bi bi-grid-3x3-gap-fill me-1"></i> 3D Report Dashboard</button>
-          <button class="nav-tab-btn" onclick="switchTab('page3', this)"><i class="bi bi-search me-1"></i> Vehicle Search Panel</button>
+          <button class="nav-tab-btn active" onclick="switchPage('page1', this)"><i class="bi bi-funnel-fill me-1"></i> Data Filter Engine</button>
+          <button class="nav-tab-btn" onclick="switchPage('page2', this)"><i class="bi bi-grid-3x3-gap-fill me-1"></i> 3D Report Dashboard</button>
+          <button class="nav-tab-btn" onclick="switchPage('page3', this)"><i class="bi bi-search me-1"></i> Smart Vehicle Search</button>
         </div>
       </div>
       <button class="btn btn-outline-primary btn-sm fw-bold" onclick="loadData(true)"><i class="bi bi-arrow-repeat me-1"></i> Sync Live Sheet</button>
@@ -114,47 +41,52 @@
 
     <!-- ================= PAGE 1: DATA FILTER ENGINE ================= -->
     <div id="page1">
-      <div class="card-3d p-4 mb-4">
-        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-sliders me-2"></i>Interactive Multi-Filter Controls</h5>
+      <div class="rich-card p-4 mb-4">
+        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-sliders me-2"></i>Master Filter Controls</h5>
         <div class="row g-3">
           <div class="col-md-3">
-            <label class="form-label small fw-bold">Select RTO / Project</label>
-            <select id="p1RtoFilter" class="form-select" onchange="applyPage1Filters()">
-              <option value="ALL">All RTOs</option>
+            <label class="form-label small fw-bold">Filter by Date</label>
+            <input type="date" id="p1DateFilter" class="form-control form-control-rich" onchange="applyPage1Filters()">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small fw-bold">Filter by Device</label>
+            <select id="p1DeviceFilter" class="form-select form-select-rich" onchange="applyPage1Filters()">
+              <option value="ALL">All Devices</option>
             </select>
           </div>
           <div class="col-md-3">
-            <label class="form-label small fw-bold">Filter by Device Hardware</label>
-            <select id="p1DeviceFilter" class="form-select" onchange="applyPage1Filters()">
-              <option value="ALL">All Hardware Devices</option>
+            <label class="form-label small fw-bold">Filter by Remark / Stage</label>
+            <select id="p1RemarkFilter" class="form-select form-select-rich" onchange="applyPage1Filters()">
+              <option value="ALL">All Remarks / Stages</option>
             </select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label small fw-bold">Select Date / Month</label>
-            <input type="month" id="p1MonthFilter" class="form-control" onchange="applyPage1Filters()">
           </div>
           <div class="col-md-3 d-flex align-items-end">
-            <button class="btn btn-secondary w-100 fw-bold" onclick="resetPage1Filters()"><i class="bi bi-arrow-counterclockwise me-1"></i> Reset Filters</button>
+            <button class="btn btn-secondary w-100 fw-bold" onclick="resetPage1Filters()"><i class="bi bi-arrow-counterclockwise me-1"></i> Reset All Filters</button>
           </div>
         </div>
       </div>
 
-      <!-- Raw Data Table -->
-      <div class="card-3d p-4">
-        <h5 class="fw-bold text-dark mb-3">Filtered Master Records Table</h5>
+      <!-- Master Records Table -->
+      <div class="rich-card p-4">
+        <h5 class="fw-bold text-dark mb-3">Filtered Master Records Table (Cols A to N)</h5>
         <div class="table-responsive">
           <table id="p1DataTable" class="table table-hover align-middle w-100">
             <thead class="table-light">
               <tr>
-                <th>Project</th>
-                <th>Order Date</th>
+                <th>Project Name</th>
+                <th>Operator Name</th>
                 <th>Vehicle No</th>
-                <th>Operator</th>
                 <th>Device Name</th>
-                <th>Hardware</th>
                 <th>Dept</th>
-                <th>IMEI</th>
-                <th>Status / Remark</th>
+                <th>Month</th>
+                <th>Stage</th>
+                <th>Pipeline Start</th>
+                <th>Project</th>
+                <th>Certificate Remarks</th>
+                <th>Timestamp</th>
+                <th>Date</th>
+                <th>Remark Date</th>
+                <th>Remark Time</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -165,299 +97,62 @@
 
     <!-- ================= PAGE 2: 3D REPORT DASHBOARD ================= -->
     <div id="page2" style="display:none;">
-      <!-- Time Scale Filters -->
-      <div class="card-3d p-3 mb-4">
-        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-          <div class="d-flex align-items-center gap-2">
-            <span class="fw-bold small text-muted text-uppercase me-2">Interval Mode:</span>
+      <div class="rich-card p-3 mb-4">
+        <div class="row g-3 align-items-center">
+          <div class="col-md-6">
+            <span class="fw-bold small text-muted text-uppercase me-2">Time Interval:</span>
             <div class="btn-group" role="group">
-              <button class="btn btn-outline-primary btn-sm active" onclick="setTimeMode('day', this)">Day</button>
+              <button class="btn btn-outline-primary btn-sm active" onclick="setTimeMode('today', this)">Today</button>
               <button class="btn btn-outline-primary btn-sm" onclick="setTimeMode('week', this)">Week</button>
               <button class="btn btn-outline-primary btn-sm" onclick="setTimeMode('month', this)">Month</button>
               <button class="btn btn-outline-primary btn-sm" onclick="setTimeMode('year', this)">Year</button>
             </div>
+            <input type="date" id="p2CustomDate" class="form-control form-control-sm d-inline-block w-auto ms-2" onchange="applyPage2Filters()">
           </div>
-          <div class="d-flex align-items-center gap-2">
-            <label class="small fw-bold">Custom Date:</label>
-            <input type="date" id="p2CustomDate" class="form-control form-control-sm" onchange="applyPage2Filters()">
+          
+          <div class="col-md-6 text-end">
+            <label class="fw-bold small text-muted text-uppercase me-2">Master Remark Filter:</label>
+            <select id="p2GlobalRemarkFilter" class="form-select form-select-sm d-inline-block w-auto fw-bold text-primary" onchange="applyPage2Filters()">
+              <option value="Certificate Issued">Certificate Issued (Default)</option>
+              <option value="ALL">All Remarks Combined</option>
+            </select>
           </div>
         </div>
       </div>
 
-      <!-- RTO-Wise 3D Report Cards Grid -->
-      <h5 class="fw-bold text-dark mb-3"><i class="bi bi-grid-fill me-2"></i>RTO Performance 3D Analytics Cards</h5>
+      <!-- RTO Cards Grid -->
+      <h5 class="fw-bold text-dark mb-3"><i class="bi bi-grid-fill me-2"></i>RTO Executive Performance Summary Cards</h5>
       <div class="row g-3" id="p2CardsGrid"></div>
     </div>
 
-    <!-- ================= PAGE 3: VEHICLE SEARCH PANEL ================= -->
+    <!-- ================= PAGE 3: SMART VEHICLE SEARCH ================= -->
     <div id="page3" style="display:none;">
-      <div class="card-3d p-4 mb-4">
-        <h5 class="fw-bold text-primary mb-2"><i class="bi bi-search me-2"></i>Smart Auto-Fetch Vehicle Search Engine</h5>
-        <p class="text-muted small mb-3">Type any part of the vehicle number or IMEI. Smart auto-fetch matches similar patterns automatically.</p>
+      <div class="rich-card p-4 mb-4">
+        <h5 class="fw-bold text-primary mb-2"><i class="bi bi-search me-2"></i>Smart Auto-Fetch Vehicle Lookup Panel</h5>
+        <p class="text-muted small mb-3">Type any part of the vehicle number (e.g. <code>HR55</code>, <code>8497</code>, <code>PB10</code>). Hyphens and spaces are automatically cleaned for 100% search accuracy.</p>
         
         <div class="input-group input-group-lg">
-          <input type="text" id="p3SearchInput" class="form-control" placeholder="Type Vehicle No (e.g. HR55, 8497, PB10)..." onkeyup="executeP3Search()">
+          <input type="text" id="p3SearchInput" class="form-control form-control-rich" placeholder="Type Vehicle Number..." onkeyup="executeP3Search()">
           <button class="btn btn-primary fw-bold px-4" onclick="executeP3Search()">Search Vehicle</button>
         </div>
       </div>
 
       <div id="p3SearchResults">
-        <div class="text-center text-muted py-5 card-3d">
-          <i class="bi bi-car-front fs-1 text-secondary opacity-50"></i>
-          <p class="mt-2">Enter vehicle details above to view live matching output.</p>
+        <div class="text-center text-muted py-5 rich-card">
+          <i class="bi bi-truck fs-1 text-secondary opacity-50 d-block mb-2"></i>
+          <p class="m-0">Enter a vehicle number above to view all matching details.</p>
         </div>
       </div>
     </div>
 
   </div>
 
-  <!-- Scripts -->
+  <!-- External Scripts -->
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-
-  <script>
-    // Security Script: Anti-Inspect / Block Shortcuts
-    document.addEventListener('keydown', function(e) {
-      if (e.keyCode === 123 || 
-         (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || 
-         (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83))) {
-        e.preventDefault();
-        return false;
-      }
-    });
-
-    const API_URL = "https://script.google.com/macros/s/AKfycbxxK9zMHnK11DKo5eqzCXeu8n866c3rjJ-6fDjGgFYV-3DJ_utjXBcHrSH26HOmiZ4oJg/exec";
-    let rawData = [];
-    let p1Table;
-    let selectedTimeMode = 'day';
-
-    async function loadData(force = false) {
-      $("#loader").css("display", "flex");
-
-      const cached = localStorage.getItem("rto_multi_cache");
-      if(cached && !force) {
-        rawData = JSON.parse(cached);
-        initAllPages();
-        $("#loader").fadeOut();
-        return;
-      }
-
-      try {
-        const res = await fetch(API_URL);
-        const json = await res.json();
-        if(json.status === "success") {
-          rawData = json.data;
-          localStorage.setItem("rto_multi_cache", JSON.stringify(rawData));
-          initAllPages();
-        }
-      } catch(e) {
-        console.error(e);
-      } finally {
-        $("#loader").fadeOut();
-      }
-    }
-
-    function switchTab(pageId, btn) {
-      $('.nav-tab-btn').removeClass('active');
-      $(btn).addClass('active');$('#page1, #page2, #page3').hide();
-      $('#' + pageId).fadeIn();
-    }
-
-    function initAllPages() {
-      populateP1FilterDropdowns();
-      applyPage1Filters();
-      applyPage2Filters();
-    }
-
-    /* ================= PAGE 1 LOGIC ================= */
-    function populateP1FilterDropdowns() {
-      const rtoSet = new Set(rawData.map(d => d.project_name || d.Project).filter(Boolean));
-      const devSet = new Set(rawData.map(d => d.device_hardware_type || d.device_name).filter(Boolean));
-
-      const rtoSel = $('#p1RtoFilter').empty().append('<option value="ALL">All RTOs</option>');
-      rtoSet.forEach(r => rtoSel.append(`<option value="${r}">${r}</option>`));
-
-      const devSel = $('#p1DeviceFilter').empty().append('<option value="ALL">All Hardware Devices</option>');
-      devSet.forEach(d => devSel.append(`<option value="${d}">${d}</option>`));
-    }
-
-    function applyPage1Filters() {
-      const selectedRto = $('#p1RtoFilter').val();
-      const selectedDev = $('#p1DeviceFilter').val();
-      const selectedMonth = $('#p1MonthFilter').val();
-
-      const filtered = rawData.filter(item => {
-        const rtoMatch = selectedRto === 'ALL' || (item.project_name || item.Project) === selectedRto;
-        const devVal = item.device_hardware_type || item.device_name;
-        const devMatch = selectedDev === 'ALL' || devVal === selectedDev;
-        
-        let monthMatch = true;
-        if(selectedMonth) {
-          const dateStr = item.order_date || item.created_at;
-          monthMatch = dateStr ? dateStr.startsWith(selectedMonth) : false;
-        }
-
-        return rtoMatch && devMatch && monthMatch;
-      });
-
-      renderP1Table(filtered);
-    }
-
-    function resetPage1Filters() {
-      $('#p1RtoFilter').val('ALL');
-      $('#p1DeviceFilter').val('ALL');
-      $('#p1MonthFilter').val('');
-      applyPage1Filters();
-    }
-
-    function renderP1Table(data) {
-      if(p1Table) p1Table.destroy();
-      const tbody = $('#p1DataTable tbody').empty();
-
-      data.forEach(row => {
-        const stage = row.stage || row['Certificate Team - Remarks'] || row.package_name || 'N/A';
-        const tr = `<tr>
-          <td><span class="badge bg-primary bg-opacity-10 text-primary">${row.project_name || row.Project || ''}</span></td>
-          <td class="small">${row.order_date || ''}</td>
-          <td class="fw-bold">${row.vehicle_number || row.vrn || ''}</td>
-          <td>${row.operator_name || ''}</td>
-          <td>${row.device_name || ''}</td>
-          <td><span class="badge bg-secondary">${row.device_hardware_type || ''}</span></td>
-          <td class="small">${row.dept || ''}</td>
-          <td class="small text-muted">${row.correct_imei || ''}</td>
-          <td><span class="badge ${stage.toLowerCase().includes('issued') ? 'bg-success' : 'bg-warning text-dark'}">${stage}</span></td>
-        </tr>`;
-        tbody.append(tr);
-      });
-
-      p1Table = $('#p1DataTable').DataTable({ pageLength: 10, deferRender: true });
-    }
-
-    /* ================= PAGE 2 LOGIC ================= */
-    function setTimeMode(mode, btn) {
-      selectedTimeMode = mode;
-      $(btn).siblings().removeClass('active');$(btn).addClass('active');
-      applyPage2Filters();
-    }
-
-    function applyPage2Filters() {
-      const customDate = $('#p2CustomDate').val();
-      const grid = $('#p2CardsGrid').empty();
-
-      // Grouping data by RTO
-      const rtoGroup = {};
-      rawData.forEach(item => {
-        const rto = item.project_name || item.Project || 'Other RTO';
-        
-        // Custom Date Filtering
-        if(customDate) {
-          const dStr = item.order_date || item.created_at;
-          if(!dStr || !dStr.startsWith(customDate)) return;
-        }
-
-        if(!rtoGroup[rto]) rtoGroup[rto] = [];
-        rtoGroup[rto].push(item);
-      });
-
-      Object.keys(rtoGroup).forEach(rto => {
-        const items = rtoGroup[rto];
-        let issued = 0, pending = 0;
-
-        items.forEach(item => {
-          const stage = (item.stage || item['Certificate Team - Remarks'] || item.package_name || '').toLowerCase();
-          if(stage.includes('certificate issued')) issued++;
-          else pending++;
-        });
-
-        const total = items.length;
-        const successRate = total > 0 ? Math.round((issued / total) * 100) : 0;
-
-        const cardHtml = `
-          <div class="col-md-4 col-lg-3">
-            <div class="card-3d p-3">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 class="fw-bold text-primary m-0">${rto}</h5>
-                <span class="badge bg-primary fs-6">${total} Total</span>
-              </div>
-
-              <div class="row g-2 text-center my-3">
-                <div class="col-6">
-                  <div class="p-2 bg-success bg-opacity-10 rounded-3">
-                    <span class="small text-success d-block fw-bold">ISSUED</span>
-                    <span class="fs-4 fw-bold text-success">${issued}</span>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="p-2 bg-warning bg-opacity-10 rounded-3">
-                    <span class="small text-warning d-block fw-bold">PENDING</span>
-                    <span class="fs-4 fw-bold text-warning">${pending}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="mb-2">
-                <div class="d-flex justify-content-between small fw-bold mb-1">
-                  <span>Success Rate</span>
-                  <span class="text-success">${successRate}%</span>
-                </div>
-                <div class="progress-bar-custom">
-                  <div class="progress-fill" style="width: ${successRate}%;"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-        grid.append(cardHtml);
-      });
-    }
-
-    /* ================= PAGE 3 LOGIC ================= */
-    function executeP3Search() {
-      const query = $('#p3SearchInput').val().replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
-      const resultsDiv = $('#p3SearchResults').empty();
-
-      if(!query) {
-        resultsDiv.html('<div class="alert alert-info card-3d">Type a vehicle number above to fetch matching records...</div>');
-        return;
-      }
-
-      const matches = rawData.filter(item => {
-        const vNo = (item.vehicle_number || item.vrn || '').replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
-        const imei = (item.correct_imei || '').replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
-        return vNo.includes(query) || imei.includes(query);
-      });
-
-      if(matches.length === 0) {
-        resultsDiv.html('<div class="alert alert-warning card-3d">No matching vehicle or IMEI records found for: <strong>' + query + '</strong></div>');
-        return;
-      }
-
-      matches.forEach(item => {
-        const cardHtml = `
-          <div class="card-3d p-4 mb-3 border-start border-4 border-primary">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h4 class="fw-bold text-primary m-0"><i class="bi bi-truck me-2"></i>${item.vehicle_number || item.vrn || 'N/A'}</h4>
-              <span class="badge bg-primary fs-6">${item.project_name || item.Project || 'RTO'}</span>
-            </div>
-
-            <div class="row g-3">
-              <div class="col-md-3"><strong>Operator:</strong> <br><span class="text-secondary">${item.operator_name || 'N/A'}</span></div>
-              <div class="col-md-3"><strong>Device/Hardware:</strong> <br><span class="text-secondary">${item.device_name || ''} (${item.device_hardware_type || ''})</span></div>
-              <div class="col-md-3"><strong>IMEI Number:</strong> <br><span class="text-primary fw-bold">${item.correct_imei || 'N/A'}</span></div>
-              <div class="col-md-3"><strong>Order Date:</strong> <br><span class="text-secondary">${item.order_date || 'N/A'}</span></div>
-              <div class="col-md-3"><strong>Live Time:</strong> <br><span class="text-secondary">${item.live_time || 'N/A'}</span></div>
-              <div class="col-md-3"><strong>Teammate / Dept:</strong> <br><span class="text-secondary">${item.teammate_code || ''} (${item.dept || ''})</span></div>
-              <div class="col-md-3"><strong>Billing Cycle:</strong> <br><span class="text-secondary">${item.software_billing_cycle || 'N/A'}</span></div>
-              <div class="col-md-3"><strong>Stage Remark:</strong> <br><span class="badge bg-warning text-dark fs-6">${item.stage || item['Certificate Team - Remarks'] || item.package_name || 'N/A'}</span></div>
-            </div>
-          </div>
-        `;
-        resultsDiv.append(cardHtml);
-      });
-    }
-
-    $(document).ready(() => loadData());
-  </script>
+  
+  <!-- Separate Custom External JavaScript -->
+  <script src="script.js"></script>
 </body>
 </html>
