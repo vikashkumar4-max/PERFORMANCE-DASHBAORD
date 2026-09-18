@@ -3,26 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RTO Executive Luxury Analytics Portal</title>
+  <title>RTO Executive Operations & Vehicle Portal</title>
   
-  <!-- Fonts & Icons -->
+  <!-- Fonts & Styles -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  
-  <!-- Chart.js & DataTables -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
   <style>
     :root {
-      --bg-main: #0B0F17;
-      --bg-card: rgba(18, 26, 41, 0.7);
-      --border-color: rgba(212, 175, 55, 0.15);
+      --bg-main: #0A0E17;
+      --bg-card: rgba(16, 24, 39, 0.85);
+      --border-color: rgba(212, 175, 55, 0.2);
       --accent-gold: #D4AF37;
-      --accent-gold-light: #F3E5AB;
-      --accent-emerald: #10B981;
-      --accent-amber: #F59E0B;
       --text-main: #F1F5F9;
       --text-muted: #94A3B8;
     }
@@ -31,26 +25,25 @@
       background-color: var(--bg-main);
       color: var(--text-main);
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-image: 
-        radial-gradient(circle at 10% 10%, rgba(212, 175, 55, 0.03) 0%, transparent 40%),
-        radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.03) 0%, transparent 40%);
-      background-attachment: fixed;
-      min-height: 100vh;
+      user-select: none; /* Disable text selection for security */
+      -webkit-user-select: none;
     }
 
     .glass-card {
       background: var(--bg-card);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       border-radius: 16px;
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-      transition: all 0.3s ease;
+      box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.6);
     }
 
-    .glass-card:hover {
-      border-color: rgba(212, 175, 55, 0.3);
-      box-shadow: 0 12px 35px -10px rgba(212, 175, 55, 0.1);
+    .rto-card {
+      border-top: 4px solid var(--accent-gold);
+      transition: transform 0.2s ease;
+    }
+
+    .rto-card:hover {
+      transform: translateY(-4px);
     }
 
     .gold-gradient-text {
@@ -64,427 +57,445 @@
       border: 1px solid var(--border-color);
       color: var(--text-muted);
       border-radius: 8px;
-      padding: 6px 16px;
+      padding: 8px 16px;
       font-size: 0.85rem;
-      font-weight: 500;
-      transition: all 0.2s ease;
+      font-weight: 600;
     }
 
     .btn-gold-toggle.active, .btn-gold-toggle:hover {
       background: linear-gradient(135deg, var(--accent-gold), #997A15);
       color: #000;
-      border-color: var(--accent-gold);
       font-weight: 700;
-      box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+      border-color: var(--accent-gold);
     }
 
-    .form-select-dark {
-      background-color: rgba(11, 15, 23, 0.8);
+    .nav-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 10px 20px;
+      border-bottom: 3px solid transparent;
+    }
+
+    .nav-tab-btn.active {
+      color: var(--accent-gold);
+      border-bottom-color: var(--accent-gold);
+    }
+
+    .form-control-dark, .form-select-dark {
+      background-color: rgba(10, 14, 23, 0.9);
       border: 1px solid var(--border-color);
       color: var(--text-main);
       border-radius: 8px;
     }
 
-    .form-select-dark:focus {
-      border-color: var(--accent-gold);
-      box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25);
-      background-color: rgba(11, 15, 23, 0.95);
+    .form-control-dark:focus, .form-select-dark:focus {
+      background-color: rgba(10, 14, 23, 1);
       color: var(--text-main);
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
     }
 
-    .kpi-value {
-      font-size: 2.2rem;
-      font-weight: 800;
-      letter-spacing: -1px;
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 10px;
     }
 
-    .chart-box {
-      position: relative;
-      height: 320px;
-    }
-
-    /* Table Styling */
     .table-dark-luxury {
       --bs-table-bg: transparent;
       --bs-table-color: var(--text-main);
       border-color: rgba(255, 255, 255, 0.05);
     }
 
-    .table-dark-luxury th {
-      color: var(--accent-gold-light);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
     #loader {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: var(--bg-main);
       z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
   </style>
 </head>
-<body>
+<body oncontextmenu="return false;"> <!-- Disable Right Click -->
 
   <!-- Loader -->
   <div id="loader">
     <div class="spinner-border text-warning" style="width: 3.5rem; height: 3.5rem;" role="status"></div>
-    <p class="mt-4 text-muted fw-light letter-spacing-2">INITIALIZING LUXURY ANALYTICS PORTAL...</p>
+    <p class="mt-3 text-muted fw-semibold">LOADING EXECUTIVE PORTAL...</p>
   </div>
 
-  <div class="container-fluid px-4 py-4">
+  <div class="container-fluid px-4 py-3">
     
-    <!-- Top Bar Header -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary border-opacity-10">
+    <!-- Top Header & Page Navigation -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-10">
+      <div class="d-flex align-items-center gap-4">
+        <h4 class="gold-gradient-text fw-bold m-0"><i class="bi bi-shield-check me-2"></i>COMMON RTO PORTAL</h4>
+        <div class="d-flex gap-2">
+          <button class="nav-tab-btn active" onclick="switchPage('dashboard', this)"><i class="bi bi-grid-3x3-gap-fill me-1"></i> RTO Dashboard</button>
+          <button class="nav-tab-btn" onclick="switchPage('vehicleLookup', this)"><i class="bi bi-search me-1"></i> Vehicle Lookup</button>
+        </div>
+      </div>
       <div>
-        <h2 class="gold-gradient-text fw-bold m-0"><i class="bi bi-shield-check me-2"></i>COMMON RTO EXECUTIVE PORTAL</h2>
-        <p class="text-muted small m-0 mt-1">Real-time Operations, Hardware Tracking & Issuance Velocity Analytics</p>
-      </div>
-      <div class="d-flex align-items-center gap-3">
-        <button class="btn btn-gold-toggle active" onclick="loadData()"><i class="bi bi-arrow-clockwise me-1"></i> Sync Live Sheet</button>
+        <button class="btn btn-gold-toggle active" onclick="loadData(true)"><i class="bi bi-arrow-clockwise me-1"></i> Sync Live Data</button>
       </div>
     </div>
 
-    <!-- Filters Bar -->
-    <div class="glass-card p-3 mb-4">
-      <div class="row g-3 align-items-center">
-        <!-- Date Aggregation Selector -->
+    <!-- ================= PAGE 1: MAIN RTO DASHBOARD ================= -->
+    <div id="page-dashboard">
+      
+      <!-- Master Time Filter Bar -->
+      <div class="glass-card p-3 mb-4">
+        <div class="row g-3 align-items-center">
+          <div class="col-md-6">
+            <label class="form-label text-muted small fw-semibold text-uppercase m-0 me-3">Time Scale:</label>
+            <div class="btn-group" role="group">
+              <button class="btn btn-gold-toggle active" onclick="setTimeMode('hourly', this)">HOURLY</button>
+              <button class="btn btn-gold-toggle" onclick="setTimeMode('daily', this)">DAILY</button>
+              <button class="btn btn-gold-toggle" onclick="setTimeMode('weekly', this)">WEEKLY</button>
+              <button class="btn btn-gold-toggle" onclick="setTimeMode('monthly', this)">MONTHLY</button>
+              <button class="btn btn-gold-toggle" onclick="setTimeMode('yearly', this)">YEARLY</button>
+            </div>
+          </div>
+          <div class="col-md-6 text-end">
+            <span class="text-muted small fw-semibold">ACTIVE TIME SCALE: </span>
+            <span class="badge bg-warning bg-opacity-20 text-warning px-3 py-2 fs-6" id="activeModeLabel">HOURLY VIEW</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Overview Cards -->
+      <div class="row g-3 mb-4">
         <div class="col-md-3">
-          <label class="form-label text-muted small fw-semibold">Time Interval Mode</label>
-          <div class="btn-group w-100" role="group">
-            <button class="btn btn-gold-toggle active" onclick="setTimeMode('hourly')">Hourly</button>
-            <button class="btn btn-gold-toggle" onclick="setTimeMode('daily')">Daily</button>
-            <button class="btn btn-gold-toggle" onclick="setTimeMode('weekly')">Weekly</button>
-            <button class="btn btn-gold-toggle" onclick="setTimeMode('monthly')">Monthly</button>
+          <div class="glass-card p-3 text-center">
+            <span class="text-muted small fw-semibold">TOTAL ORDERS</span>
+            <div class="fs-2 fw-bold text-light mt-1" id="kpi-total">0</div>
           </div>
         </div>
-
-        <!-- Project Filter -->
         <div class="col-md-3">
-          <label class="form-label text-muted small fw-semibold">Filter Project / RTO</label>
-          <select id="projectFilter" class="form-select form-select-dark" onchange="applyFilters()">
-            <option value="ALL">All Projects & Mines</option>
-          </select>
+          <div class="glass-card p-3 text-center">
+            <span class="text-muted small fw-semibold">ISSUED CERTIFICATES</span>
+            <div class="fs-2 fw-bold text-success mt-1" id="kpi-issued">0</div>
+          </div>
         </div>
-
-        <!-- Hardware Filter Buttons -->
-        <div class="col-md-6">
-          <label class="form-label text-muted small fw-semibold">Device Hardware Family</label>
-          <div id="hardwareBtnGroup" class="d-flex flex-wrap gap-2">
-            <!-- Dynamic Hardware Toggle Buttons -->
+        <div class="col-md-3">
+          <div class="glass-card p-3 text-center">
+            <span class="text-muted small fw-semibold">PENDING TOP-UP</span>
+            <div class="fs-2 fw-bold text-warning mt-1" id="kpi-pending">0</div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="glass-card p-3 text-center">
+            <span class="text-muted small fw-semibold">AVG ORDER VS INST (HRS)</span>
+            <div class="fs-2 fw-bold text-info mt-1" id="kpi-tat">0 <span class="fs-6 text-muted">hrs</span></div>
           </div>
         </div>
       </div>
+
+      <!-- RTO Cards Grid -->
+      <h5 class="gold-gradient-text fw-bold mb-3"><i class="bi bi-cpu me-2"></i>RTO & Project Performance Cards</h5>
+      <div class="row g-3 mb-4" id="rtoCardsGrid"></div>
+
+      <!-- Granular Data Stream Table -->
+      <div class="glass-card p-4 mb-4">
+        <h5 class="gold-gradient-text fw-bold mb-3">Live RTO Operations Table (Cols A to N)</h5>
+        <div class="table-responsive">
+          <table id="rtoTable" class="table table-dark-luxury align-middle w-100">
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Order Date</th>
+                <th>Vehicle No</th>
+                <th>Operator</th>
+                <th>Device Name</th>
+                <th>Hardware</th>
+                <th>Dept</th>
+                <th>Teammate</th>
+                <th>IMEI</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
 
-    <!-- KPI Summary Row -->
-    <div class="row g-3 mb-4">
-      <div class="col-md-3">
-        <div class="glass-card p-3">
-          <div class="d-flex justify-content-between align-items-center">
-            <span class="text-muted small fw-semibold">TOTAL OPERATIONS</span>
-            <i class="bi bi-cpu text-warning"></i>
+    <!-- ================= PAGE 2: VEHICLE LOOKUP PORTAL ================= -->
+    <div id="page-vehicleLookup" style="display: none;">
+      <div class="glass-card p-4 mb-4">
+        <h4 class="gold-gradient-text fw-bold mb-2"><i class="bi bi-car-front me-2"></i>Vehicle Specific Search Portal</h4>
+        <p class="text-muted small mb-4">Enter any vehicle number below to fetch real-time device installation details, operator info, and timestamps.</p>
+        
+        <div class="row g-3">
+          <div class="col-md-8">
+            <input type="text" id="vehicleSearchInput" class="form-control form-control-dark form-control-lg" placeholder="Type Vehicle Number (e.g. HR55AU9513, GJ03BV8497)...">
           </div>
-          <div class="kpi-value text-light mt-2" id="kpi-total">0</div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="glass-card p-3">
-          <div class="d-flex justify-content-between align-items-center">
-            <span class="text-muted small fw-semibold">CERTIFICATES ISSUED</span>
-            <i class="bi bi-patch-check text-success"></i>
-          </div>
-          <div class="kpi-value text-success mt-2" id="kpi-issued">0</div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="glass-card p-3">
-          <div class="d-flex justify-content-between align-items-center">
-            <span class="text-muted small fw-semibold">PENDING / TOP-UP</span>
-            <i class="bi bi-hourglass-split text-warning"></i>
-          </div>
-          <div class="kpi-value text-warning mt-2" id="kpi-pending">0</div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="glass-card p-3">
-          <div class="d-flex justify-content-between align-items-center">
-            <span class="text-muted small fw-semibold">AVG TURN-AROUND (TAT)</span>
-            <i class="bi bi-speedometer2 text-info"></i>
-          </div>
-          <div class="kpi-value text-info mt-2" id="kpi-tat">0 <span class="fs-6 text-muted">hrs</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main Visualizations -->
-    <div class="row g-3 mb-4">
-      <!-- Time Series Chart -->
-      <div class="col-md-8">
-        <div class="glass-card p-4">
-          <h5 class="gold-gradient-text fw-bold mb-3" id="timeSeriesTitle">Operations & Certificate Velocity</h5>
-          <div class="chart-box">
-            <canvas id="timeSeriesChart"></canvas>
+          <div class="col-md-4">
+            <button class="btn btn-gold-toggle active w-100 h-100 fs-6 fw-bold" onclick="searchVehicle()"><i class="bi bi-search me-2"></i> Search Vehicle Details</button>
           </div>
         </div>
       </div>
 
-      <!-- Project Issuance Distribution -->
-      <div class="col-md-4">
-        <div class="glass-card p-4">
-          <h5 class="gold-gradient-text fw-bold mb-3">Project Share</h5>
-          <div class="chart-box">
-            <canvas id="projectShareChart"></canvas>
-          </div>
+      <!-- Search Result Display Area -->
+      <div id="vehicleResultContainer">
+        <div class="text-center text-muted py-5 glass-card">
+          <i class="bi bi-search fs-1 opacity-50 d-block mb-2"></i>
+          <p>No vehicle searched yet. Enter a vehicle number above to view details.</p>
         </div>
-      </div>
-    </div>
-
-    <!-- Data Matrix -->
-    <div class="glass-card p-4 mb-4">
-      <h5 class="gold-gradient-text fw-bold mb-3">Granular Operations Stream</h5>
-      <div class="table-responsive">
-        <table id="rtoTable" class="table table-dark-luxury align-middle w-100">
-          <thead>
-            <tr>
-              <th>Project</th>
-              <th>Vehicle Number</th>
-              <th>Operator</th>
-              <th>Hardware</th>
-              <th>Order Date</th>
-              <th>Stage / Status</th>
-              <th>Order vs Inst (Hrs)</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
       </div>
     </div>
 
   </div>
 
-  <!-- JS Dependencies -->
+  <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbwiFr7g0kMeKtFmgReJPFBrmI18mTXhoHIUMQMTF4y1QBWY2GTo26T_-ACeheF9dexVzw/exec";
-    
+    // Security Script: Block CTRL+U, CTRL+S, F12, DevTools
+    document.addEventListener('keydown', function(e) {
+      if (e.keyCode === 123 || 
+         (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || 
+         (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83))) {
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    const API_URL = "https://script.google.com/macros/s/AKfycbwSs6l1h4hvf4049SMBsA2Pw_Vb9F-jIvD5qYP5Sm8m5L8JXKK5H0kblVQGBxAy6HBA_g/exec";
     let rawData = [];
     let selectedTimeMode = 'hourly';
-    let selectedProject = 'ALL';
-    let selectedHardware = 'ALL';
-    
-    let timeSeriesChart, projectShareChart, dataTable;
+    let dataTable;
 
-    async function loadData() {
+    async function loadData(force = false) {
       $("#loader").css("display", "flex");
+
+      const cached = localStorage.getItem("rto_v2_cache");
+      if(cached && !force) {
+        rawData = JSON.parse(cached);
+        processAndRender();
+        $("#loader").fadeOut();
+        return;
+      }
+
       try {
         const response = await fetch(API_URL);
         const result = await response.json();
-        
         if(result.status === "success") {
           rawData = result.data;
-          populateHardwareButtons();
-          populateProjectDropdown();
-          applyFilters();
-        } else {
-          alert("Data load error: " + result.message);
+          localStorage.setItem("rto_v2_cache", JSON.stringify(rawData));
+          processAndRender();
         }
       } catch(err) {
         console.error(err);
-        alert("Failed to connect to Google Apps Script API");
       } finally {
         $("#loader").fadeOut();
       }
     }
 
-    function populateHardwareButtons() {
-      const hwSet = new Set(rawData.map(d => d.device_hardware_type || d.device_name).filter(Boolean));
-      const group = $('#hardwareBtnGroup');
-      group.empty();
-      
-      group.append(`<button class="btn btn-gold-toggle ${selectedHardware === 'ALL' ? 'active' : ''}" onclick="setHardware('ALL')">ALL DEVICES</button>`);
-      hwSet.forEach(hw => {
-        group.append(`<button class="btn btn-gold-toggle ${selectedHardware === hw ? 'active' : ''}" onclick="setHardware('${hw}')">${hw}</button>`);
-      });
+    function switchPage(pageId, btn) {
+      $('.nav-tab-btn').removeClass('active');
+      $(btn).addClass('active');$('#page-dashboard, #page-vehicleLookup').hide();
+      $('#page-' + pageId).fadeIn();
     }
 
-    function populateProjectDropdown() {
-      const projSet = new Set(rawData.map(d => d.project_name).filter(Boolean));
-      const select = $('#projectFilter');
-      select.find('option:gt(0)').remove();
-      
-      projSet.forEach(p => {
-        select.append(`<option value="${p}">${p}</option>`);
-      });
-    }
-
-    function setTimeMode(mode) {
+    function setTimeMode(mode, btn) {
       selectedTimeMode = mode;
-      $('.btn-group .btn-gold-toggle').removeClass('active');$(event.target).addClass('active');
-      applyFilters();
+      $('.btn-group .btn-gold-toggle').removeClass('active');
+      $(btn).addClass('active');$('#activeModeLabel').text(mode.toUpperCase() + ' VIEW');
+      processAndRender();
     }
 
-    function setHardware(hw) {
-      selectedHardware = hw;
-      $('#hardwareBtnGroup .btn-gold-toggle').removeClass('active');
-      $(event.target).addClass('active');
-      applyFilters();
+    function processAndRender() {
+      renderSummaryKPIs();
+      renderRTOCards();
+      renderTable();
     }
 
-    function applyFilters() {
-      selectedProject = $('#projectFilter').val();
-      
-      let filtered = rawData.filter(item => {
-        const projMatch = selectedProject === 'ALL' || item.project_name === selectedProject;
-        const hwVal = item.device_hardware_type || item.device_name;
-        const hwMatch = selectedHardware === 'ALL' || hwVal === selectedHardware;
-        return projMatch && hwMatch;
-      });
-
-      renderKPIs(filtered);
-      renderTimeSeriesChart(filtered);
-      renderProjectShareChart(filtered);
-      renderTable(filtered);
-    }
-
-    function renderKPIs(data) {
-      const total = data.length;
+    function renderSummaryKPIs() {
       let issued = 0, pending = 0, totalTat = 0, tatCount = 0;
-
-      data.forEach(item => {
-        const stage = (item.stage || item['Certificate Team - Remarks'] || '').toLowerCase();
-        if(stage.includes('certificate issued')) issued++;
-        if(stage.includes('pending')) pending++;
+      rawData.forEach(item => {
+        const pkg = (item.package_name || '').toLowerCase();
+        if(pkg.includes('certificate issued')) issued++;
+        else pending++;
 
         const tat = parseFloat(item['ORDER VS INST ( HRS )']);
-        if(!isNaN(tat)) {
-          totalTat += tat;
-          tatCount++;
-        }
+        if(!isNaN(tat)) { totalTat += tat; tatCount++; }
       });
 
-      $('#kpi-total').text(total);
+      $('#kpi-total').text(rawData.length);
       $('#kpi-issued').text(issued);
       $('#kpi-pending').text(pending);
       $('#kpi-tat').text(tatCount > 0 ? (totalTat / tatCount).toFixed(1) : '0');
     }
 
-    function renderTimeSeriesChart(data) {
-      const aggregated = {};
+    function renderRTOCards() {
+      const grid = $('#rtoCardsGrid').empty();
+      const rtoGroup = {};
 
-      data.forEach(item => {
-        const dateStr = item.order_date || item.created_at;
-        if(!dateStr) return;
-
-        const dateObj = new Date(dateStr);
-        if(isNaN(dateObj)) return;
-
-        let key = '';
-        if(selectedTimeMode === 'hourly') {
-          key = `${dateObj.getHours()}:00 Hrs`;
-        } else if(selectedTimeMode === 'daily') {
-          key = dateObj.toISOString().split('T')[0];
-        } else if(selectedTimeMode === 'weekly') {
-          key = `Week ${getWeekNumber(dateObj)}`;
-        } else if(selectedTimeMode === 'monthly') {
-          key = dateObj.toLocaleString('default', { month: 'short', year: 'numeric' });
-        }
-
-        aggregated[key] = (aggregated[key] || 0) + 1;
+      rawData.forEach(item => {
+        const rto = item.project_name || 'Other RTO';
+        if(!rtoGroup[rto]) rtoGroup[rto] = [];
+        rtoGroup[rto].push(item);
       });
 
-      const ctx = document.getElementById('timeSeriesChart').getContext('2d');
-      if(timeSeriesChart) timeSeriesChart.destroy();
+      Object.keys(rtoGroup).forEach(rto => {
+        const items = rtoGroup[rto];
+        let issued = 0, pending = 0;
+        const timeIntervalCounts = {};
 
-      timeSeriesChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: Object.keys(aggregated),
-          datasets: [{
-            label: 'Volume Trends',
-            data: Object.values(aggregated),
-            borderColor: '#D4AF37',
-            backgroundColor: 'rgba(212, 175, 55, 0.1)',
-            fill: true,
-            tension: 0.4,
-            borderWidth: 2
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8' } },
-            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8' } }
+        items.forEach(item => {
+          const pkg = (item.package_name || '').toLowerCase();
+          if(pkg.includes('certificate issued')) issued++;
+          else pending++;
+
+          const dateStr = item.order_date || item.live_time;
+          if(dateStr) {
+            const dateObj = new Date(dateStr);
+            if(!isNaN(dateObj)) {
+              let key = '';
+              if(selectedTimeMode === 'hourly') key = `${dateObj.getHours()}:00 Hrs`;
+              else if(selectedTimeMode === 'daily') key = dateObj.toISOString().split('T')[0];
+              else if(selectedTimeMode === 'weekly') key = `W${getWeekNumber(dateObj)}`;
+              else if(selectedTimeMode === 'monthly') key = dateObj.toLocaleString('default', { month: 'short' });
+              else if(selectedTimeMode === 'yearly') key = dateObj.getFullYear();
+              
+              timeIntervalCounts[key] = (timeIntervalCounts[key] || 0) + 1;
+            }
           }
-        }
+        });
+
+        let intervalBadgesHtml = '';
+        Object.keys(timeIntervalCounts).slice(0, 4).forEach(k => {
+          intervalBadgesHtml += `<span class="badge bg-secondary bg-opacity-20 text-warning me-1 mb-1">${k}: ${timeIntervalCounts[k]}</span>`;
+        });
+
+        const cardHtml = `
+          <div class="col-md-4 col-lg-3">
+            <div class="glass-card rto-card p-3 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5 class="gold-gradient-text fw-bold m-0">${rto}</h5>
+                  <span class="badge bg-warning text-dark fw-bold">${items.length} Orders</span>
+                </div>
+                
+                <div class="row g-2 text-center my-2">
+                  <div class="col-6">
+                    <div class="stat-pill">
+                      <span class="text-muted small d-block">ISSUED</span>
+                      <span class="fw-bold text-success fs-5">${issued}</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="stat-pill">
+                      <span class="text-muted small d-block">PENDING</span>
+                      <span class="fw-bold text-warning fs-5">${pending}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border-top border-secondary border-opacity-10 pt-2 mt-3">
+                <span class="text-muted small d-block mb-1">${selectedTimeMode.toUpperCase()} BREAKDOWN:</span>
+                <div>${intervalBadgesHtml || '<span class="text-muted small">No data</span>'}</div>
+              </div>
+            </div>
+          </div>
+        `;
+        grid.append(cardHtml);
       });
     }
 
-    function renderProjectShareChart(data) {
-      const projectCounts = {};
-      data.forEach(item => {
-        const proj = item.project_name || 'Other';
-        projectCounts[proj] = (projectCounts[proj] || 0) + 1;
-      });
-
-      const ctx = document.getElementById('projectShareChart').getContext('2d');
-      if(projectShareChart) projectShareChart.destroy();
-
-      projectShareChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: Object.keys(projectCounts),
-          datasets: [{
-            data: Object.values(projectCounts),
-            backgroundColor: ['#D4AF37', '#10B981', '#3B82F6', '#F59E0B', '#EC4899', '#8B5CF6']
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom', labels: { color: '#94A3B8', font: { size: 10 } } } }
-        }
-      });
-    }
-
-    function renderTable(data) {
+    function renderTable() {
       if(dataTable) dataTable.destroy();
+      const tbody = $('#rtoTable tbody').empty();
 
-      const tbody = $('#rtoTable tbody');
-      tbody.empty();
-
-      data.forEach(row => {
-        const stage = row.stage || row['Certificate Team - Remarks'] || 'N/A';
-        const isIssued = stage.toLowerCase().includes('issued');
-        const badgeClass = isIssued ? 'bg-success bg-opacity-20 text-success' : 'bg-warning bg-opacity-20 text-warning';
-
+      rawData.forEach(row => {
         const tr = `<tr>
-          <td><span class="badge bg-secondary bg-opacity-30 text-light">${row.project_name || ''}</span></td>
+          <td><span class="badge bg-secondary bg-opacity-30">${row.project_name || ''}</span></td>
+          <td class="text-muted small">${row.order_date || ''}</td>
           <td class="fw-bold text-light">${row.vehicle_number || row.vrn || ''}</td>
           <td class="text-muted">${row.operator_name || ''}</td>
-          <td><span class="text-warning small">${row.device_hardware_type || row.device_name || ''}</span></td>
-          <td class="text-muted small">${row.order_date || ''}</td>
-          <td><span class="badge ${badgeClass}">${stage}</span></td>
-          <td class="text-info fw-semibold">${row['ORDER VS INST ( HRS )'] ? parseFloat(row['ORDER VS INST ( HRS )']).toFixed(1) : '-'}</td>
+          <td>${row.device_name || ''}</td>
+          <td><span class="text-warning small">${row.device_hardware_type || ''}</span></td>
+          <td class="text-muted small">${row.dept || ''}</td>
+          <td class="text-muted small">${row.teammate_code || ''}</td>
+          <td class="text-info small">${row.correct_imei || ''}</td>
         </tr>`;
         tbody.append(tr);
       });
 
-      dataTable = $('#rtoTable').DataTable({
-        pageLength: 8,
-        order: [[4, 'desc']],
-        language: { search: "_INPUT_", searchPlaceholder: "Search records..." }
+      dataTable = $('#rtoTable').DataTable({ pageLength: 8, deferRender: true });
+    }
+
+    function searchVehicle() {
+      const query = $('#vehicleSearchInput').val().trim().toLowerCase();
+      const container = $('#vehicleResultContainer').empty();
+
+      if(!query) {
+        container.html('<div class="alert alert-warning">Please enter a vehicle number to search.</div>');
+        return;
+      }
+
+      const matches = rawData.filter(d => {
+        const vNo = (d.vehicle_number || d.vrn || '').toLowerCase();
+        return vNo.includes(query);
+      });
+
+      if(matches.length === 0) {
+        container.html('<div class="alert alert-danger glass-card">No records found for vehicle: <strong>' + query + '</strong></div>');
+        return;
+      }
+
+      matches.forEach(item => {
+        const cardHtml = `
+          <div class="glass-card p-4 mb-3 border-start border-4 border-warning">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="gold-gradient-text fw-bold m-0"><i class="bi bi-truck me-2"></i>${item.vehicle_number || item.vrn || 'N/A'}</h4>
+              <span class="badge bg-warning text-dark fs-6">${item.project_name || 'RTO'}</span>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-3">
+                <span class="text-muted small d-block">OPERATOR NAME</span>
+                <span class="fw-semibold text-light">${item.operator_name || 'N/A'}</span>
+              </div>
+              <div class="col-md-3">
+                <span class="text-muted small d-block">PACKAGE NAME</span>
+                <span class="fw-semibold text-light">${item.package_name || 'N/A'}</span>
+              </div>
+              <div class="col-md-3">
+                <span class="text-muted small d-block">DEVICE / HARDWARE</span>
+                <span class="fw-semibold text-warning">${item.device_name || ''} (${item.device_hardware_type || 'N/A'})</span>
+              </div>
+              <div class="col-md-3">
+                <span class="text-muted small d-block">CORRECT IMEI</span>
+                <span class="fw-semibold text-info">${item.correct_imei || 'N/A'}</span>
+              </div>
+
+              <div class="col-md-3">
+                <span class="text-muted small d-block">ORDER DATE</span>
+                <span class="fw-semibold text-light">${item.order_date || 'N/A'}</span>
+              </div>
+              <div class="col-md-3">
+                <span class="text-muted small d-block">LIVE TIME</span>
+                <span class="fw-semibold text-light">${item.live_time || 'N/A'}</span>
+              </div>
+              <div class="col-md-3">
+                <span class="text-muted small d-block">DEPARTMENT / TEAMMATE</span>
+                <span class="fw-semibold text-light">${item.dept || 'N/A'} (${item.teammate_code || 'N/A'})</span>
+              </div>
+              <div class="col-md-3">
+                <span class="text-muted small d-block">BILLING CYCLE</span>
+                <span class="fw-semibold text-light">${item.software_billing_cycle || 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+        container.append(cardHtml);
       });
     }
 
@@ -495,7 +506,7 @@
       return Math.ceil((((d - yearStart) / 86400000) + 1)/7);
     }
 
-    $(document).ready(loadData);
+    $(document).ready(() => loadData());
   </script>
 </body>
 </html>
