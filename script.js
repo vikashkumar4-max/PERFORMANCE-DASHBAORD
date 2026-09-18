@@ -1,33 +1,44 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbztOp0wjzSLjIbdwCjmwncfMQkqVCtmm8-W12b2ozh5fvDZqqfmA9x-QgcFNQq8RsCv-g/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbw6gQlsa-AhEH__-uuAepbAnQeSGnMu4oiTIE8syMVKWcTLwXiEFolwZdISch1y7CN9qA/exec"; // Put your Web App URL here
 let rawData = [];
 let p1Table;
 let selectedTimeMode = 'today';
 
 async function loadData(force = false) {
   $("#loader").css("display", "flex");
-  const cached = localStorage.getItem("common_rto_cache_v5");
-  
+
+  const cached = localStorage.getItem("common_rto_cache_v7");
   if (cached && !force) {
     try {
       rawData = JSON.parse(cached);
-      initPortal();
-      $("#loader").fadeOut();
-      return;
+      if (Array.isArray(rawData) && rawData.length > 0) {
+        initPortal();
+        $("#loader").fadeOut();
+        return;
+      }
     } catch(e) {
-      localStorage.removeItem("common_rto_cache_v5");
+      localStorage.removeItem("common_rto_cache_v7");
     }
   }
 
   try {
     const res = await fetch(API_URL);
     const json = await res.json();
-    if (json.status === "success" && Array.isArray(json.data)) {
+    
+    // Fail-safe handling for direct or wrapped array response
+    if (Array.isArray(json)) {
+      rawData = json;
+    } else if (json && Array.isArray(json.data)) {
       rawData = json.data;
-      localStorage.setItem("common_rto_cache_v5", JSON.stringify(rawData));
+    } else {
+      rawData = [];
+    }
+
+    if (rawData.length > 0) {
+      localStorage.setItem("common_rto_cache_v7", JSON.stringify(rawData));
       initPortal();
     }
   } catch(e) {
-    console.error(e);
+    console.error("Fetch Error:", e);
   } finally {
     $("#loader").fadeOut();
   }
@@ -46,7 +57,6 @@ function initPortal() {
   applyPage2Filters();
 }
 
-/* Helper to parse dates across multiple string formats */
 function normalizeDate(str) {
   if (!str) return '';
   const d = new Date(str);
