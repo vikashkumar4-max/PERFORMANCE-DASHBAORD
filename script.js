@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbwdAXJaJQBKdN6G2SYawhHrs2ETUTUaUnC2cmsfFBN_MIEYFGS1wsYGdmaRJ6w2_DSOBQ/exec"; // Put your Web App URL here
+const API_URL = "https://script.google.com/macros/s/AKfycbzcQtxZ-uLinkM1gXw78jKHRFgJ1MLHp6SfkhXttUd9w7fJydSJzXmS18sgfYNvsySb6w/exec"; // Put your Web App URL here
 let rawData = [];
 let p1Table;
 let selectedTimeMode = 'today';
