@@ -8,7 +8,7 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxane2-ZimQM0qfaj-iIzoWujFzrehRJTo1-BEaIekjwEzEk5e9G5-yBq_6U1dCO60ZnQ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbztOp0wjzSLjIbdwCjmwncfMQkqVCtmm8-W12b2ozh5fvDZqqfmA9x-QgcFNQq8RsCv-g/exec";
 let rawData = [];
 let p1Table;
 let selectedTimeMode = 'today';
