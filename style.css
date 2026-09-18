@@ -1,0 +1,88 @@
+:root {
+  --bg-main: #F8FAFC;
+  --card-bg: #FFFFFF;
+  --primary-navy: #0F172A;
+  --accent-blue: #2563EB;
+  --accent-gold: #D97706;
+  --border-light: #E2E8F0;
+  --text-main: #1E293B;
+  --text-muted: #64748B;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Header Navigation */
+.top-navbar {
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+
+.nav-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: 12px 20px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.nav-tab-btn.active {
+  color: var(--accent-blue);
+  border-bottom-color: var(--accent-blue);
+  background: rgba(37, 99, 235, 0.04);
+}
+
+/* Classic Light Glass Cards */
+.rich-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rich-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+}
+
+.card-rto-header {
+  border-bottom: 2px solid #F1F5F9;
+  padding-bottom: 8px;
+}
+
+.stat-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.form-control-rich, .form-select-rich {
+  background-color: #FFFFFF;
+  border: 1px solid var(--border-light);
+  color: var(--text-main);
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.form-control-rich:focus, .form-select-rich:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Fast Loader Overlay */
+#loader {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 9999;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
