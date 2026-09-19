@@ -1,130 +1,48 @@
-:root {
-  --gov-navy: #0A2540;
-  --gov-blue: #0056B3;
-  --bg-light: #F4F6F8;
-  --border-color: #D1D5DB;
-}
-
 body {
-  background-color: var(--bg-light);
-  font-family: 'Roboto', sans-serif;
-  color: #1F2937;
-  user-select: text !important;
-  -webkit-user-select: text !important;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: #f4f6f9;
 }
 
-/* LOGIN OVERLAY */
-#loginOverlay {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(10, 37, 64, 0.95);
-  z-index: 10000;
-  display: flex; align-items: center; justify-content: center;
-}
-
-.login-card {
-  background: #FFFFFF;
-  border-radius: 8px;
-  padding: 30px;
-  width: 100%; max-width: 400px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-}
-
-.gov-emblem-icon {
-  font-size: 2.5rem;
-  color: var(--gov-navy);
-}
-
-/* GOVT HEADER */
-.gov-header {
-  background-color: var(--gov-navy);
-  color: #FFFFFF;
-  border-bottom: 3px solid #FF9933;
-}
-
-.btn-gov-primary {
-  background-color: var(--gov-navy);
-  color: #FFFFFF;
-  border: none;
-}
-.btn-gov-primary:hover {
-  background-color: var(--gov-blue);
-  color: #FFFFFF;
-}
-
-.btn-gov-outline {
-  border: 1px solid var(--gov-navy);
-  color: var(--gov-navy);
-  font-weight: 600;
-}
-.btn-gov-outline.active, .btn-gov-outline:hover {
-  background-color: var(--gov-navy);
-  color: #FFFFFF;
-}
-
-.gov-card {
-  background: #FFFFFF;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
-}
-
-.nav-module-card {
-  background: #FFFFFF;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.nav-module-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-}
-
-.card-icon {
-  width: 45px; height: 45px;
-  border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem;
-}
-
-/* EXECUTIVE REPORT TABLES & CARDS */
-.exec-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-.exec-table th {
-  background-color: var(--gov-navy);
-  color: #FFFFFF;
-  padding: 8px;
-  text-align: center;
-}
-.exec-table td {
-  border: 1px solid var(--border-color);
-  padding: 8px;
-  text-align: center;
-  font-weight: 600;
-}
-
-.big-total-box {
-  background: #F0F4F8;
-  border: 2px solid #0056B3;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4rem;
+.fw-black {
   font-weight: 900;
-  color: var(--gov-blue);
 }
 
-.team-stat-card {
-  border-radius: 6px;
-  padding: 15px;
-  text-align: center;
+.tracking-wider {
+  letter-spacing: 1.2px;
 }
 
-.spin-icon {
-  animation: spin 1s linear infinite;
+.card {
+  border-radius: 10px;
+  overflow: hidden;
 }
-@keyframes spin { 100% { transform: rotate(360deg); } }
+
+.emp-card {
+  background: #ffffff;
+  border: 1px solid #e3e6f0;
+  border-left: 4px solid #198754;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.emp-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.table th {
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.8px;
+}
+
+.table td {
+  font-size: 0.95rem;
+}
+
+.badge-count {
+  font-size: 1.1rem;
+  padding: 8px 16px;
+  border-radius: 20px;
+}
