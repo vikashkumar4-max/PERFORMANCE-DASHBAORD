@@ -19,16 +19,16 @@ body {
 .emp-card {
   background: #ffffff;
   border: 1px solid #e3e6f0;
-  border-left: 4px solid #198754;
+  border-left: 5px solid #198754;
   border-radius: 8px;
   padding: 16px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.04);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .emp-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.09);
 }
 
 .table th {
@@ -42,7 +42,7 @@ body {
 }
 
 .badge-count {
-  font-size: 1.1rem;
-  padding: 8px 16px;
+  font-size: 1.15rem;
+  padding: 8px 18px;
   border-radius: 20px;
 }
