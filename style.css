@@ -1,48 +1,59 @@
+:root {
+  --govt-dark: #1a252f;
+  --govt-accent: #f39c12;
+  --bg-light: #f4f6f9;
+}
+
 body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background-color: #f4f6f9;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-light);
 }
 
-.fw-black {
-  font-weight: 900;
+.fs-8 { font-size: 0.7rem; }
+.tracking-wider { letter-spacing: 1.2px; }
+
+/* Login Page Styling */
+.login-wrapper {
+  background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+}
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
 }
 
-.tracking-wider {
-  letter-spacing: 1.2px;
+/* Govt Top Bar */
+.bg-govt-dark {
+  background-color: var(--govt-dark);
+}
+.btn-nav {
+  color: #bdc3c7;
+  font-weight: 600;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+}
+.btn-nav:hover, .btn-nav.active {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid var(--govt-accent);
 }
 
-.card {
-  border-radius: 10px;
-  overflow: hidden;
-}
-
+/* Executive Cards */
 .emp-card {
   background: #ffffff;
-  border: 1px solid #e3e6f0;
-  border-left: 5px solid #198754;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #198754;
   border-radius: 8px;
   padding: 16px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.04);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.emp-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.09);
+/* Scrollable Table */
+.style-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-
-.table th {
-  font-weight: 700;
-  font-size: 0.85rem;
-  letter-spacing: 0.8px;
-}
-
-.table td {
-  font-size: 0.95rem;
-}
-
-.badge-count {
-  font-size: 1.15rem;
-  padding: 8px 18px;
-  border-radius: 20px;
+.style-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
 }
