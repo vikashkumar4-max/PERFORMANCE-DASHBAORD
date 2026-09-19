@@ -3,246 +3,287 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>State RTO Executive Performance Portal</title>
-  <!-- Google Fonts & Bootstrap 5 -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <title>COMMON RTO OPERATIONS PORTAL - GOVT MONITORING SYSTEM</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- LOGIN SCREEN -->
-  <div id="loginScreen" class="login-wrapper d-flex align-items-center justify-content-center min-vh-100">
-    <div class="card login-card shadow-lg border-0 p-4">
+  <!-- LOGIN OVERLAY LAYER -->
+  <div id="loginOverlay">
+    <div class="login-card">
       <div class="text-center mb-4">
-        <div class="govt-emblem mb-2">
-          <i class="fa-solid fa-shield-halved fs-1 text-warning"></i>
-        </div>
-        <h4 class="fw-bold text-uppercase tracking-wider">RTO EXECUTIVE PORTAL</h4>
-        <p class="text-muted small">Government Operational Monitoring System</p>
+        <div class="gov-emblem-icon mb-2"><i class="bi bi-shield-lock-fill"></i></div>
+        <h4 class="fw-bold text-dark">COMMON RTO PORTAL</h4>
+        <p class="text-muted small">Official Operations & Monitoring Login</p>
       </div>
-      <form id="loginForm">
+      <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="mb-3">
-          <label class="form-label font-monospace small fw-bold">USERNAME</label>
-          <div class="input-group">
-            <span class="input-group-text bg-light"><i class="fa-solid fa-user"></i></span>
-            <input type="text" id="loginUser" class="form-control" placeholder="Enter Username" required>
-          </div>
+          <label class="form-label fw-bold small text-secondary">USER ID / CREDENTIAL</label>
+          <input type="text" id="loginUser" class="form-control" placeholder="Enter User ID" required>
         </div>
-        <div class="mb-4">
-          <label class="form-label font-monospace small fw-bold">PASSWORD</label>
-          <div class="input-group">
-            <span class="input-group-text bg-light"><i class="fa-solid fa-lock"></i></span>
-            <input type="password" id="loginPass" class="form-control" placeholder="Enter Password" required>
-          </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold small text-secondary">PASSWORD</label>
+          <input type="password" id="loginPass" class="form-control" placeholder="Enter Password" required>
         </div>
-        <div id="loginAlert" class="alert alert-danger d-none py-2 small" role="alert"></div>
-        <button type="submit" class="btn btn-warning w-100 fw-bold text-uppercase py-2 shadow-sm">
-          <i class="fa-solid fa-right-to-bracket me-2"></i> Secure Login
-        </button>
+        <div id="loginError" class="text-danger small mb-3 fw-bold" style="display:none;">Invalid Credentials!</div>
+        <button type="submit" class="btn btn-gov-primary w-100 fw-bold">ACCESS PORTAL</button>
       </form>
     </div>
   </div>
 
-  <!-- MAIN PORTAL WRAPPER (HIDDEN UNTIL LOGIN) -->
-  <div id="portalApp" class="d-none">
-
-    <!-- GOVT TOP HEADER NAV -->
-    <nav class="navbar navbar-dark bg-govt-dark sticky-top py-2">
-      <div class="container-fluid px-4">
-        <a class="navbar-brand fw-bold d-flex align-items-center gap-3" href="#">
-          <i class="fa-solid fa-building-columns text-warning fs-4"></i>
-          <div>
-            <div class="fs-6 text-white lh-1">EXECUTIVE RTO PORTAL</div>
-            <span class="text-warning fs-8 font-monospace">GOVT. PERFORMANCE & TRACKING SYSTEM</span>
-          </div>
-        </a>
-
-        <!-- NAVIGATION TABS -->
-        <div class="d-flex align-items-center gap-2 mx-auto">
-          <button class="btn btn-nav active" onclick="switchPage('pageMaster')">
-            <i class="fa-solid fa-database me-1"></i> Master Data
-          </button>
-          <button class="btn btn-nav" onclick="switchPage('pageReport')">
-            <i class="fa-solid fa-chart-pie me-1"></i> Executive Dashboard
-          </button>
-          <button class="btn btn-nav" onclick="switchPage('pageSearch')">
-            <i class="fa-solid fa-magnifying-glass me-1"></i> Vehicle Search
-          </button>
-        </div>
-
-        <!-- RIGHT STATUS & LOGOUT -->
-        <div class="d-flex align-items-center gap-3">
-          <span class="badge bg-success font-monospace px-3 py-2" id="syncStatus">
-            <i class="fa-solid fa-rotate fa-spin me-1"></i> Auto-Sync: 10s
-          </span>
-          <button onclick="logout()" class="btn btn-outline-light btn-sm font-monospace">
-            <i class="fa-solid fa-power-off me-1 text-danger"></i> Logout
-          </button>
-        </div>
+  <!-- GOVT HEADER BAR -->
+  <div class="gov-header px-4 py-2 d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-3">
+      <div class="gov-title">
+        <h5 class="m-0 fw-bold"><i class="bi bi-bank2 me-2"></i>COMMON RTO OPERATIONS & REPORTING SYSTEM</h5>
+        <span class="small opacity-75">Ministry of Road Transport & Highways - Data Portal</span>
       </div>
-    </nav>
-
-    <!-- CONTENT PAGES -->
-    <div class="container-fluid py-4 px-4">
-
-      <!-- PAGE 1: MASTER DATA TAB & FILTERS -->
-      <div id="pageMaster" class="page-view">
-        <div class="card shadow-sm border-0 mb-4">
-          <div class="card-header bg-dark text-white fw-bold d-flex align-items-center justify-content-between py-3">
-            <span><i class="fa-solid fa-filter text-warning me-2"></i> MASTER DATA FILTERS</span>
-            <button onclick="resetFilters()" class="btn btn-sm btn-outline-warning">Reset Filters</button>
-          </div>
-          <div class="card-body bg-light p-3">
-            <div class="row g-3">
-              <div class="col-12 col-md-3">
-                <label class="form-label small fw-bold font-monospace">Search Keyword</label>
-                <input type="text" id="filterKeyword" class="form-control form-control-sm" placeholder="Search anything...">
-              </div>
-              <div class="col-12 col-md-3">
-                <label class="form-label small fw-bold font-monospace">Project / RTO</label>
-                <select id="filterRto" class="form-select form-select-sm">
-                  <option value="">All RTOs</option>
-                </select>
-              </div>
-              <div class="col-12 col-md-3">
-                <label class="form-label small fw-bold font-monospace">Remark / Status</label>
-                <select id="filterRemark" class="form-select form-select-sm">
-                  <option value="">All Status</option>
-                  <option value="issued">Issued Only</option>
-                  <option value="pending">Pending Only</option>
-                </select>
-              </div>
-              <div class="col-12 col-md-3">
-                <label class="form-label small fw-bold font-monospace">Employee Name</label>
-                <select id="filterEmp" class="form-select form-select-sm">
-                  <option value="">All Employees</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card shadow-sm border-0">
-          <div class="card-body p-0">
-            <div class="table-responsive style-scroll" style="max-height: 550px;">
-              <table class="table table-striped table-hover align-middle mb-0 text-center font-monospace small">
-                <thead class="table-dark sticky-top">
-                  <tr id="masterTableHead">
-                    <th>Loading Columns...</th>
-                  </tr>
-                </thead>
-                <tbody id="masterTableBody">
-                  <tr><td class="py-4 text-muted">Loading Master Data Records...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PAGE 2: EXECUTIVE REPORT DASHBOARD -->
-      <div id="pageReport" class="page-view d-none">
-        <div class="row g-4 mb-4">
-          <!-- GRAND TOTAL CARD -->
-          <div class="col-12 col-xl-4">
-            <div class="card h-100 shadow-sm border-0 border-start border-5 border-warning bg-white">
-              <div class="card-body p-4 text-center d-flex flex-column justify-content-center">
-                <div class="text-uppercase text-muted fw-bold mb-2 tracking-wider small">
-                  <i class="fa-solid fa-award text-warning me-1"></i> GRAND TOTAL ISSUED
-                </div>
-                <h1 class="display-2 fw-bold text-dark my-2 font-monospace" id="grandTotalIssued">0</h1>
-                <span class="badge bg-success-subtle text-success py-1 px-3 rounded-pill mx-auto">Live Sheet Sync</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- TEAM / EXECUTIVE CARDS -->
-          <div class="col-12 col-xl-8">
-            <div class="card h-100 shadow-sm border-0 bg-white">
-              <div class="card-header bg-dark text-white fw-bold text-uppercase d-flex align-items-center justify-content-between py-3">
-                <span><i class="fa-solid fa-users-gear text-warning me-2"></i> TEAM & EXECUTIVE PERFORMANCE CARDS</span>
-                <span class="badge bg-warning text-dark font-monospace" id="totalTeamCount">0 TEAMS</span>
-              </div>
-              <div class="card-body p-4">
-                <div class="row g-3" id="employeeCardsContainer">
-                  <div class="col-12 text-center text-muted py-4">Loading Executive Cards...</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- THIS MONTH SUMMARY TABLE -->
-        <div class="card shadow-sm border-0">
-          <div class="card-header bg-dark text-white fw-bold text-uppercase text-center py-3">
-            <i class="fa-solid fa-table-list text-warning me-2"></i> THIS MONTH RTO PERFORMANCE SUMMARY
-          </div>
-          <div class="card-body p-0">
-            <div class="table-responsive">
-              <table class="table table-bordered table-striped align-middle text-center mb-0 font-monospace">
-                <thead class="table-dark text-uppercase small">
-                  <tr>
-                    <th class="py-3">RTO NAME</th>
-                    <th class="py-3">RECEIVED</th>
-                    <th class="py-3">CERTIFICATE ISSUED</th>
-                    <th class="py-3">% COMPLETION</th>
-                    <th class="py-3">PENDING</th>
-                  </tr>
-                </thead>
-                <tbody id="monthSummaryTbody" class="fw-bold">
-                  <tr><td colspan="5" class="py-4 text-muted">Loading Monthly Report...</td></tr>
-                </tbody>
-                <tfoot class="table-secondary fw-bold border-top border-3 border-dark">
-                  <tr>
-                    <td class="py-3 text-start ps-4">TOTAL</td>
-                    <td id="mTotReceived" class="py-3">0</td>
-                    <td id="mTotIssued" class="py-3 text-success">0</td>
-                    <td id="mTotPct" class="py-3 text-primary">0.00%</td>
-                    <td id="mTotPending" class="py-3 text-danger">0</td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PAGE 3: VEHICLE SEARCH PANEL -->
-      <div id="pageSearch" class="page-view d-none">
-        <div class="row justify-content-center">
-          <div class="col-12 col-md-8 col-lg-6">
-            <div class="card shadow-sm border-0 mb-4">
-              <div class="card-header bg-dark text-white fw-bold text-uppercase py-3 text-center">
-                <i class="fa-solid fa-magnifying-glass text-warning me-2"></i> VEHICLE NUMBER LOOKUP
-              </div>
-              <div class="card-body p-4">
-                <div class="input-group input-group-lg">
-                  <input type="text" id="vehicleSearchInput" class="form-control font-monospace text-uppercase" placeholder="e.g. UP14AB1234">
-                  <button class="btn btn-warning fw-bold px-4" onclick="searchVehicle()">SEARCH</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="vehicleResultContainer" class="row justify-content-center d-none">
-          <div class="col-12 col-lg-10">
-            <div class="card shadow-sm border-0 border-top border-5 border-warning">
-              <div class="card-header bg-white fw-bold py-3">VEHICLE DETAILS & HISTORY</div>
-              <div class="card-body p-4" id="vehicleResultBody">
-                <!-- Dynamic Content -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    </div>
+    <div class="d-flex align-items-center gap-3" id="userHeaderControls" style="display:none !important;">
+      <span class="badge bg-light text-dark fw-bold px-3 py-2" id="syncBadge"><i class="bi bi-arrow-repeat spin-icon"></i> Syncing Live...</span>
+      <button class="btn btn-danger btn-sm fw-bold px-3" onclick="handleLogout()"><i class="bi bi-power me-1"></i> Logout</button>
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- PORTAL CONTENT WRAPPER -->
+  <div id="portalMainContent" class="container-fluid px-4 py-3" style="display:none;">
+
+    <!-- MAIN PAGE DASHBOARD (THREE BUTTON / CARDS NAVIGATION) -->
+    <div id="mainDashboardPage">
+      <div class="alert alert-primary border-0 shadow-sm d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h5 class="fw-bold mb-1"><i class="bi bi-speedometer2 me-2"></i>System Operations Control Center</h5>
+          <p class="m-0 small">Select a module below to filter raw data, inspect 3D executive reports, or search vehicle logs.</p>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <div class="nav-module-card p-4 h-100" onclick="switchPage('page1')">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="card-icon bg-primary text-white"><i class="bi bi-funnel-fill"></i></div>
+              <h5 class="fw-bold text-dark m-0">1. Data Filter Engine</h5>
+            </div>
+            <p class="text-muted small">Filter raw logs by RTO, Pipeline Start Date, Device, and Remarks. Exportable table view.</p>
+            <button class="btn btn-outline-primary btn-sm fw-bold w-100">Open Filter Engine &rarr;</button>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="nav-module-card p-4 h-100" onclick="switchPage('page2')">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="card-icon bg-success text-white"><i class="bi bi-bar-chart-line-fill"></i></div>
+              <h5 class="fw-bold text-dark m-0">2. 3D Report Dashboard</h5>
+            </div>
+            <p class="text-muted small">Real-time dynamic aggregation cards, today/week/month/year interval filters, and state split tables.</p>
+            <button class="btn btn-outline-success btn-sm fw-bold w-100">Open Executive Report &rarr;</button>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="nav-module-card p-4 h-100" onclick="switchPage('page3')">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="card-icon bg-warning text-dark"><i class="bi bi-search"></i></div>
+              <h5 class="fw-bold text-dark m-0">3. Smart Vehicle Search</h5>
+            </div>
+            <p class="text-muted small">Instant clean search engine to lookup full details for any vehicle registration number.</p>
+            <button class="btn btn-outline-warning text-dark btn-sm fw-bold w-100">Open Search Engine &rarr;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE TOP NAVIGATION BAR -->
+    <div id="moduleNavBar" class="mb-3 d-flex align-items-center justify-content-between bg-white p-2 border rounded shadow-sm" style="display:none;">
+      <button class="btn btn-secondary btn-sm fw-bold" onclick="showMainDashboard()"><i class="bi bi-house-door-fill me-1"></i> Main Hub</button>
+      <div class="btn-group" role="group">
+        <button class="btn btn-outline-primary btn-sm fw-bold page-nav-btn" id="btnNavPage1" onclick="switchPage('page1')">1. Filter Engine</button>
+        <button class="btn btn-outline-primary btn-sm fw-bold page-nav-btn" id="btnNavPage2" onclick="switchPage('page2')">2. 3D Report Dashboard</button>
+        <button class="btn btn-outline-primary btn-sm fw-bold page-nav-btn" id="btnNavPage3" onclick="switchPage('page3')">3. Vehicle Search</button>
+      </div>
+    </div>
+
+    <!-- PAGE 1: DATA FILTER ENGINE -->
+    <div id="page1" style="display:none;">
+      <div class="gov-card p-3 mb-3">
+        <h6 class="fw-bold text-primary mb-3"><i class="bi bi-sliders me-2"></i>Master Record Filter Controls</h6>
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label small fw-bold">Filter by RTO / Project</label>
+            <select id="p1RtoFilter" class="form-select form-select-sm" onchange="applyPage1Filters()">
+              <option value="ALL">All RTOs</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small fw-bold">Filter by Pipeline Start Date</label>
+            <input type="date" id="p1PipelineDateFilter" class="form-control form-control-sm" onchange="applyPage1Filters()">
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small fw-bold">Filter by Device</label>
+            <select id="p1DeviceFilter" class="form-select form-select-sm" onchange="applyPage1Filters()">
+              <option value="ALL">All Devices</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small fw-bold">Filter by Remark / Stage</label>
+            <select id="p1RemarkFilter" class="form-select form-select-sm" onchange="applyPage1Filters()">
+              <option value="ALL">All Remarks / Stages</option>
+            </select>
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-secondary btn-sm w-100 fw-bold" onclick="resetPage1Filters()"><i class="bi bi-arrow-counterclockwise me-1"></i> Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="gov-card p-3">
+        <div class="table-responsive">
+          <table id="p1DataTable" class="table table-bordered table-hover align-middle w-100 small">
+            <thead class="table-dark">
+              <tr>
+                <th>Project Name</th>
+                <th>Operator Name</th>
+                <th>Vehicle No</th>
+                <th>Device Name</th>
+                <th>Dept</th>
+                <th>Month</th>
+                <th>Stage</th>
+                <th>Pipeline Start</th>
+                <th>Project</th>
+                <th>Certificate Remarks</th>
+                <th>Timestamp</th>
+                <th>Date</th>
+                <th>Remark Date</th>
+                <th>Remark Time</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: EXECUTIVE REPORT DASHBOARD -->
+    <div id="page2" style="display:none;">
+      <div class="gov-card p-3 mb-3">
+        <div class="row g-2 align-items-center">
+          <div class="col-md-12 d-flex flex-wrap align-items-center gap-2">
+            <span class="fw-bold small text-uppercase me-2 text-dark"><i class="bi bi-funnel me-1"></i>Time Interval:</span>
+            <div class="btn-group" role="group">
+              <button class="btn btn-gov-outline btn-sm active" onclick="setTimeMode('today', this)">Today</button>
+              <button class="btn btn-gov-outline btn-sm" onclick="setTimeMode('week', this)">Week</button>
+              <button class="btn btn-gov-outline btn-sm" onclick="setTimeMode('month', this)">Month</button>
+              <button class="btn btn-gov-outline btn-sm" onclick="setTimeMode('year', this)">Year</button>
+            </div>
+
+            <span class="fw-bold small text-uppercase ms-3 me-1 text-dark">Custom Date Search:</span>
+            <input type="text" id="p2CustomDate" class="form-control form-control-sm w-auto" placeholder="Any format (e.g. 18-Sep-2026)" onkeyup="applyPage2Filters()">
+
+            <div class="ms-auto d-flex align-items-center gap-2">
+              <select id="p2DeviceFilter" class="form-select form-select-sm fw-bold" onchange="applyPage2Filters()">
+                <option value="ALL">All Devices</option>
+              </select>
+              <select id="p2RemarkFilter" class="form-select form-select-sm fw-bold text-primary" onchange="applyPage2Filters()">
+                <option value="Certificate Issued">Certificate Issued (Default)</option>
+                <option value="Top-up Pending">Top-up Pending</option>
+                <option value="ALL">All Remarks Combined</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN EXECUTIVE REPORT CARD (PHOTO MATCH) -->
+      <div class="gov-card p-4 mb-4">
+        <h5 class="fw-bold text-center text-dark mb-4">Common RTO Performance</h5>
+        <div class="row g-4">
+          <!-- Left: State Table -->
+          <div class="col-md-5">
+            <table class="exec-table">
+              <thead>
+                <tr>
+                  <th>STATE / RTO</th>
+                  <th id="p2TableColHeader">Certificate Issued</th>
+                </tr>
+              </thead>
+              <tbody id="p2RtoTableBody"></tbody>
+              <tfoot>
+                <tr class="table-dark">
+                  <th>TOTAL</th>
+                  <th id="p2TableTotalVal">0</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <!-- Middle: Big Total Box -->
+          <div class="col-md-3 d-flex flex-column">
+            <div class="big-total-box flex-grow-1" id="p2GrandTotalBox">0</div>
+          </div>
+
+          <!-- Right: Team Split -->
+          <div class="col-md-4 d-flex flex-column gap-3">
+            <div class="team-stat-card bg-warning text-dark">
+              <div class="small fw-bold">RAJSHEKHAR / RAGHAV / LAKSHYA</div>
+              <div class="fs-1 fw-bold" id="p2Team1Val">0</div>
+            </div>
+            <div class="team-stat-card bg-info text-white">
+              <div class="small fw-bold">VIKASH</div>
+              <div class="fs-1 fw-bold" id="p2Team2Val">0</div>
+            </div>
+            <div class="team-stat-card bg-success text-white">
+              <div class="small fw-bold">SONU</div>
+              <div class="fs-1 fw-bold" id="p2Team3Val">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIME PERIOD OVERVIEW CARDS (Month / Week / Year Breakdown) -->
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="gov-card p-3 text-center border-start border-4 border-primary">
+            <h6 class="text-muted small fw-bold">CURRENT MONTH PERFORMANCE</h6>
+            <h2 class="fw-bold text-primary mb-0" id="cardMonthTotal">0</h2>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="gov-card p-3 text-center border-start border-4 border-success">
+            <h6 class="text-muted small fw-bold">CURRENT WEEK PERFORMANCE</h6>
+            <h2 class="fw-bold text-success mb-0" id="cardWeekTotal">0</h2>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="gov-card p-3 text-center border-start border-4 border-dark">
+            <h6 class="text-muted small fw-bold">CURRENT YEAR PERFORMANCE</h6>
+            <h2 class="fw-bold text-dark mb-0" id="cardYearTotal">0</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 3: SMART VEHICLE SEARCH -->
+    <div id="page3" style="display:none;">
+      <div class="gov-card p-4 mb-4">
+        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-search me-2"></i>Official Vehicle Lookup Registry</h5>
+        <div class="input-group input-group-lg">
+          <input type="text" id="p3SearchInput" class="form-control" placeholder="Enter Registration Number (e.g. HR26...)" onkeyup="executeP3Search()">
+          <button class="btn btn-gov-primary fw-bold px-4" onclick="executeP3Search()">SEARCH VEHICLE</button>
+        </div>
+      </div>
+      <div id="p3SearchResults"></div>
+    </div>
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="script.js"></script>
 </body>
-</html>
+</html>      
