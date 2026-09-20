@@ -19,11 +19,11 @@
       <div class="text-center mb-4">
         <div class="gov-emblem-icon mb-2"><i class="bi bi-shield-lock-fill"></i></div>
         <h4 class="fw-bold text-dark">COMMON RTO PORTAL</h4>
-        <p class="text-muted small">Official Operations & Monitoring Login</p>
+        <p class="text-muted small">managed by MRATYUNJAY WORLD</p>
       </div>
       <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="mb-3">
-          <label class="form-label fw-bold small text-secondary">USER ID / CREDENTIAL</label>
+          <label class="form-label fw-bold small text-secondary">USER ID</label>
           <input type="text" id="loginUser" class="form-control" placeholder="Enter User ID" required>
         </div>
         <div class="mb-3">
@@ -41,7 +41,7 @@
     <div class="d-flex align-items-center gap-3">
       <div class="gov-title">
         <h5 class="m-0 fw-bold"><i class="bi bi-bank2 me-2"></i>COMMON RTO OPERATIONS & REPORTING SYSTEM</h5>
-        <span class="small opacity-75">Ministry of Road Transport & Highways - Data Portal</span>
+        <span class="small opacity-75">Wheelseye AIS certification - Data Portal</span>
       </div>
     </div>
     <div class="d-flex align-items-center gap-3" id="userHeaderControls" style="display:none !important;">
@@ -67,7 +67,7 @@
           <div class="nav-module-card p-4 h-100" onclick="switchPage('page1')">
             <div class="d-flex align-items-center gap-3 mb-3">
               <div class="card-icon bg-primary text-white"><i class="bi bi-funnel-fill"></i></div>
-              <h5 class="fw-bold text-dark m-0">1. Data Filter Engine</h5>
+              <h5 class="fw-bold text-dark m-0">Common RTO Visibility </h5>
             </div>
             <p class="text-muted small">Filter raw logs by RTO, Pipeline Start Date, Device, and Remarks. Exportable table view.</p>
             <button class="btn btn-outline-primary btn-sm fw-bold w-100">Open Filter Engine &rarr;</button>
@@ -78,7 +78,7 @@
           <div class="nav-module-card p-4 h-100" onclick="switchPage('page2')">
             <div class="d-flex align-items-center gap-3 mb-3">
               <div class="card-icon bg-success text-white"><i class="bi bi-bar-chart-line-fill"></i></div>
-              <h5 class="fw-bold text-dark m-0">2. 3D Report Dashboard</h5>
+              <h5 class="fw-bold text-dark m-0">Report Dashboard</h5>
             </div>
             <p class="text-muted small">Real-time dynamic aggregation cards, today/week/month/year interval filters, and state split tables.</p>
             <button class="btn btn-outline-success btn-sm fw-bold w-100">Open Executive Report &rarr;</button>
@@ -89,7 +89,7 @@
           <div class="nav-module-card p-4 h-100" onclick="switchPage('page3')">
             <div class="d-flex align-items-center gap-3 mb-3">
               <div class="card-icon bg-warning text-dark"><i class="bi bi-search"></i></div>
-              <h5 class="fw-bold text-dark m-0">3. Smart Vehicle Search</h5>
+              <h5 class="fw-bold text-dark m-0">3. Smart Vehicle Search Panel</h5>
             </div>
             <p class="text-muted small">Instant clean search engine to lookup full details for any vehicle registration number.</p>
             <button class="btn btn-outline-warning text-dark btn-sm fw-bold w-100">Open Search Engine &rarr;</button>
@@ -100,37 +100,37 @@
 
     <!-- MODULE TOP NAVIGATION BAR -->
     <div id="moduleNavBar" class="mb-3 d-flex align-items-center justify-content-between bg-white p-2 border rounded shadow-sm" style="display:none;">
-      <button class="btn btn-secondary btn-sm fw-bold" onclick="showMainDashboard()"><i class="bi bi-house-door-fill me-1"></i> Main Hub</button>
+      <button class="btn btn-secondary btn-sm fw-bold" onclick="showMainDashboard()"><i class="bi bi-house-door-fill me-1"></i> HOME</button>
       <div class="btn-group" role="group">
-        <button class="btn btn-outline-primary btn-sm fw-bold page-nav-btn" id="btnNavPage1" onclick="switchPage('page1')">1. Filter Engine</button>
-        <button class="btn btn-outline-primary btn-sm fw-bold page-nav-btn" id="btnNavPage2" onclick="switchPage('page2')">2. 3D Report Dashboard</button>
-        <button class="btn btn-outline-primary btn-sm fw-bold page-nav-btn" id="btnNavPage3" onclick="switchPage('page3')">3. Vehicle Search</button>
+        <button class="btn btn-outline-primary btn-sm fw-bold page-nav-btn" id="btnNavPage1" onclick="switchPage('page1')"> DATA SUMMARY </button>
+        <button class="btn btn-outline-primary btn-sm fw-bold page-nav-btn" id="btnNavPage2" onclick="switchPage('page2')">Report Dashboard</button>
+        <button class="btn btn-outline-primary btn-sm fw-bold page-nav-btn" id="btnNavPage3" onclick="switchPage('page3')"> Vehicle Search Panel</button>
       </div>
     </div>
 
     <!-- PAGE 1: DATA FILTER ENGINE -->
     <div id="page1" style="display:none;">
       <div class="gov-card p-3 mb-3">
-        <h6 class="fw-bold text-primary mb-3"><i class="bi bi-sliders me-2"></i>Master Record Filter Controls</h6>
+        <h6 class="fw-bold text-primary mb-3"><i class="bi bi-sliders me-2"></i>common rto </h6>
         <div class="row g-3">
           <div class="col-md-3">
-            <label class="form-label small fw-bold">Filter by RTO / Project</label>
+            <label class="form-label small fw-bold"> RTO / Project</label>
             <select id="p1RtoFilter" class="form-select form-select-sm" onchange="applyPage1Filters()">
-              <option value="ALL">All RTOs</option>
+              <option value="ALL">All RTO</option>
             </select>
           </div>
           <div class="col-md-3">
-            <label class="form-label small fw-bold">Filter by Pipeline Start Date</label>
+            <label class="form-label small fw-bold">Pipeline Start Date</label>
             <input type="date" id="p1PipelineDateFilter" class="form-control form-control-sm" onchange="applyPage1Filters()">
           </div>
           <div class="col-md-2">
-            <label class="form-label small fw-bold">Filter by Device</label>
+            <label class="form-label small fw-bold"> Device</label>
             <select id="p1DeviceFilter" class="form-select form-select-sm" onchange="applyPage1Filters()">
               <option value="ALL">All Devices</option>
             </select>
           </div>
           <div class="col-md-2">
-            <label class="form-label small fw-bold">Filter by Remark / Stage</label>
+            <label class="form-label small fw-bold">Remark / Stage</label>
             <select id="p1RemarkFilter" class="form-select form-select-sm" onchange="applyPage1Filters()">
               <option value="ALL">All Remarks / Stages</option>
             </select>
@@ -151,14 +151,11 @@
                 <th>Vehicle No</th>
                 <th>Device Name</th>
                 <th>Dept</th>
-                <th>Month</th>
                 <th>Stage</th>
                 <th>Pipeline Start</th>
-                <th>Project</th>
                 <th>Certificate Remarks</th>
                 <th>Timestamp</th>
                 <th>Date</th>
-                <th>Remark Date</th>
                 <th>Remark Time</th>
               </tr>
             </thead>
@@ -173,7 +170,7 @@
       <div class="gov-card p-3 mb-3">
         <div class="row g-2 align-items-center">
           <div class="col-md-12 d-flex flex-wrap align-items-center gap-2">
-            <span class="fw-bold small text-uppercase me-2 text-dark"><i class="bi bi-funnel me-1"></i>Time Interval:</span>
+            <span class="fw-bold small text-uppercase me-2 text-dark"><i class="bi bi-funnel me-1"></i>format</span>
             <div class="btn-group" role="group">
               <button class="btn btn-gov-outline btn-sm active" onclick="setTimeMode('today', this)">Today</button>
               <button class="btn btn-gov-outline btn-sm" onclick="setTimeMode('week', this)">Week</button>
@@ -248,19 +245,19 @@
       <div class="row g-3">
         <div class="col-md-4">
           <div class="gov-card p-3 text-center border-start border-4 border-primary">
-            <h6 class="text-muted small fw-bold">CURRENT MONTH PERFORMANCE</h6>
+            <h6 class="text-muted small fw-bold">THIS MONTH PERFORMANCE</h6>
             <h2 class="fw-bold text-primary mb-0" id="cardMonthTotal">0</h2>
           </div>
         </div>
         <div class="col-md-4">
           <div class="gov-card p-3 text-center border-start border-4 border-success">
-            <h6 class="text-muted small fw-bold">CURRENT WEEK PERFORMANCE</h6>
+            <h6 class="text-muted small fw-bold">THIS WEEK PERFORMANCE</h6>
             <h2 class="fw-bold text-success mb-0" id="cardWeekTotal">0</h2>
           </div>
         </div>
         <div class="col-md-4">
           <div class="gov-card p-3 text-center border-start border-4 border-dark">
-            <h6 class="text-muted small fw-bold">CURRENT YEAR PERFORMANCE</h6>
+            <h6 class="text-muted small fw-bold">THIS YEAR PERFORMANCE</h6>
             <h2 class="fw-bold text-dark mb-0" id="cardYearTotal">0</h2>
           </div>
         </div>
@@ -270,7 +267,7 @@
     <!-- PAGE 3: SMART VEHICLE SEARCH -->
     <div id="page3" style="display:none;">
       <div class="gov-card p-4 mb-4">
-        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-search me-2"></i>Official Vehicle Lookup Registry</h5>
+        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-search me-2"></i>Official Vehicle History </h5>
         <div class="input-group input-group-lg">
           <input type="text" id="p3SearchInput" class="form-control" placeholder="Enter Registration Number (e.g. HR26...)" onkeyup="executeP3Search()">
           <button class="btn btn-gov-primary fw-bold px-4" onclick="executeP3Search()">SEARCH VEHICLE</button>
@@ -286,4 +283,4 @@
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="script.js"></script>
 </body>
-</html>      
+</html>
